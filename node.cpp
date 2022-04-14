@@ -52,38 +52,59 @@ void print(node* root)
       print(root->right);
     }
 }
-/*
-node* search(node* treeNodeHead, node* current, int searchNumber)
+
+void visualize(node* root, int level)
+{
+  if (root != NULL)
+    {
+      visualize(root->right, level + 1);
+      for (int i = 0; i < level; i++)
+	{
+	  cout << '\t';
+	}
+      cout << root->data << endl;
+      visualize(root->left, level + 1);
+    }
+}
+
+node* search(node* treeNodeHead, node* parent, node* current, int searchNumber)
 {
   
   if (current->data == searchNumber)
     {
       return current;
     }
-  else if (current->data != searchNumber)
+  else if (current == NULL)
     {
-      if (current->data > searchNumber)
+      if (parent->data == searchNumber)
 	{
-	  current = current->right;
-	  search(treeNodeHead, current, searchNumber);
+	  return parent;
 	}
       else
 	{
-	  if (current->data < searchNumber)
-	    {
-	      current = current->left;
-	      search(treeNodeHead, current, searchNumber);
-	    }
-	}
-      else if (current->left == NULL)
-	{
-	  cout << "number not found" << endl;
-	}
-      else if (current->right == NULL)
-	{
-	  cout << "number not found" << endl;
+	  return NULL;
 	}
     }
-  
+  else
+    {
+      if (current->data == searchNumber)
+	{
+	  return current;
+	}
+      else
+	{
+	  parent = current;
+	  if (parent->data < searchNumber)
+	    {
+	      current = current->right;
+	    }
+	  else
+	    {
+	      current = current->left;
+	    }
+	  return search(treeNodeHead, parent, current, searchNumber);
+	}
+    }
+  //return false;
 }
-*/
+

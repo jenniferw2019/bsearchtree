@@ -14,7 +14,8 @@ struct node
 
 };
 
-node* search(node* treeNodeHead, node* current, int searchNumber);
+node* search(node* treeNodeHead, node* parent, node* current, int searchNumber);
 void insert(node* &root, node* parent, node* current, int value);
 void print(node* root);
+void visualize(node* root, int level);
 #endif
