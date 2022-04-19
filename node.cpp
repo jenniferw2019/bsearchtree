@@ -67,44 +67,210 @@ void visualize(node* root, int level)
     }
 }
 
-node* search(node* treeNodeHead, node* parent, node* current, int searchNumber)
+/*
+bool search(node* treeNodeHead, node* parent, node* current, int searchNumber)
 {
   
   if (current->data == searchNumber)
     {
-      return current;
+      return true;
     }
+  
   else if (current == NULL)
     {
+      cout << "line 80" << endl;
       if (parent->data == searchNumber)
 	{
-	  return parent;
+	  return true;
 	}
       else
 	{
-	  return NULL;
+	  cout << "line 86" << endl;
+	  return false;
 	}
     }
+  
   else
     {
+      cout << "line 92" << endl;  
       if (current->data == searchNumber)
 	{
-	  return current;
+	  return true;
 	}
       else
 	{
+	  cout << "line 99" << endl;
 	  parent = current;
 	  if (parent->data < searchNumber)
 	    {
+	      cout << "line 103" << endl;
 	      current = current->right;
 	    }
 	  else
 	    {
 	      current = current->left;
 	    }
+	  cout << "line 111" << endl;
 	  return search(treeNodeHead, parent, current, searchNumber);
 	}
     }
-  //return false;
+}
+*/
+
+
+node* search(node* treeNodeHead, node* parent, node* current, int searchNumber)
+{
+  
+  if (current == NULL)
+    {
+      return NULL;
+	
+    }
+  
+  else if (current->data == searchNumber)
+    {
+      return current;
+    }
+  
+  else
+    {	
+      //cout << "line 99" << endl;
+      parent = current;
+      if (parent->data < searchNumber)
+	{
+	  //cout << "line 103" << endl;
+	  current = current->right;
+	}
+      else
+	{
+	  current = current->left;
+	}
+      //cout << "line 111" << endl;
+      return search(treeNodeHead, parent, current, searchNumber);
+    }
+}
+
+node* minimum(node* root)
+{
+  if (root->left != NULL)
+    {
+      root = root->left;
+      return minimum(root);
+    }
+  else
+    {
+      return root;
+    }
+}
+
+node* getParent(node* root, node* current, node* previous, node* lookParent)
+{
+  if (root == lookParent)
+    {
+      return NULL;
+    }
+  else if (current == lookParent)
+    {
+      return previous;
+    }
+  /*
+  else if (current == NULL)
+    {
+      if (previous == lookParent)
+	{
+	  return previous;
+	}
+      else
+	{
+	  return NULL;
+	}
+    }
+  */
+  else 
+    {
+      previous = current;
+      if (previous->data < lookParent->data)
+	{
+	  current = current->right;
+	}
+      else
+	{
+	  current = current->left;
+	}
+      return getParent(root, current, previous, lookParent);
+    }
+}
+
+
+void deleteNode(node* &root, int deleteNumber)
+{
+  node* delNode = search(root, root, root, deleteNumber);
+  //cout << delNode->data << endl;
+  if (delNode == NULL)
+    {
+      cout << "number not in tree" << endl;
+      
+    }
+  else
+    {	
+      //no child
+     if (delNode->left == NULL && delNode->right == NULL)
+	{
+	  if (delNode == root)
+	    {
+	      node* temp = root;
+	      root = NULL;
+	      delete temp;
+	    }
+	  else
+	    {
+	      node* parent = getParent(root, root, root, delNode);
+	      if (parent->left == delNode)
+		{
+		  parent->left = NULL;
+		  delete delNode;
+		}
+	      else
+		{
+		  parent->right = NULL;
+		  delete delNode;
+		}
+	    }
+	}
+     //one child: right
+     else if (delNode->right != NULL && delNode->left == NULL)
+       {
+	 if (delNode == root)
+	   {
+	     node* temp = root;
+	     root = delNode->right;
+	     delete temp;
+	   }
+	 else
+	   {
+	     node* parent = getParent(root, root, root, delNode);
+	     parent->right = delNode->right;
+	     delete delNode;
+	  
+	   }
+       }
+     //one child: left
+     else if (delNode->right == NULL && delNode->left != NULL)
+       {
+	 if (delNode == root)
+	   {
+	     node* temp = root;
+	     root = delNode->left;
+	     delete temp;
+	   }
+	 else
+	   {
+	     node* parent = getParent(root, root, root, delNode);
+	     parent->left = delNode->left;
+	     delete delNode;
+	   }
+       }
+     
+    }
 }
 

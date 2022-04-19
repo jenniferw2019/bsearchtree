@@ -65,6 +65,23 @@ int main()
 
       print(BST);
       cout << endl;
+
+      
+      node* temp = NULL;
+      temp = minimum(BST);
+      cout << temp->data << endl;
+
+      node* parent = NULL;
+      parent = getParent(BST, BST, BST, temp);
+      if (parent != NULL)
+	{
+	  cout << parent->data << endl;
+	}
+      else
+	{
+	  cout << "parent is null" << endl;
+	}
+      
     }
   if (strcmp(option, "FILE") == 0)
     {
@@ -112,11 +129,21 @@ int main()
 
       print(BST);
       cout << endl;
+
+      
+      node* temp = NULL;
+      temp = minimum(BST);
+      cout << temp->data << endl;
+
+      node* findParent = NULL;
+      findParent = getParent(BST, BST, BST, temp);
+      cout << findParent->data << endl;
+      
     }
 
   while (runProgram == true)
     {
-      cout << "Type ADD, VISUALIZE, SEARCH" << endl;
+      cout << "Type ADD, VISUALIZE, SEARCH, DELETE" << endl;
       cin.get(option2, 20);
       cin.get();
 
@@ -153,6 +180,17 @@ int main()
 	      cout << "number is not in tree" << endl;
 	    }
 	}
+      
+      if (strcmp(option2, "DELETE") == 0)
+	{
+	  int deleteNum = 0;
+	  cout << "type the number you want to delete" << endl;
+	  cin >> deleteNum;
+	  cin.get();
+
+	  deleteNode(BST, deleteNum);
+	}
+      
     }
  
 }
