@@ -67,57 +67,6 @@ void visualize(node* root, int level)
     }
 }
 
-/*
-bool search(node* treeNodeHead, node* parent, node* current, int searchNumber)
-{
-  
-  if (current->data == searchNumber)
-    {
-      return true;
-    }
-  
-  else if (current == NULL)
-    {
-      cout << "line 80" << endl;
-      if (parent->data == searchNumber)
-	{
-	  return true;
-	}
-      else
-	{
-	  cout << "line 86" << endl;
-	  return false;
-	}
-    }
-  
-  else
-    {
-      cout << "line 92" << endl;  
-      if (current->data == searchNumber)
-	{
-	  return true;
-	}
-      else
-	{
-	  cout << "line 99" << endl;
-	  parent = current;
-	  if (parent->data < searchNumber)
-	    {
-	      cout << "line 103" << endl;
-	      current = current->right;
-	    }
-	  else
-	    {
-	      current = current->left;
-	    }
-	  cout << "line 111" << endl;
-	  return search(treeNodeHead, parent, current, searchNumber);
-	}
-    }
-}
-*/
-
-
 node* search(node* treeNodeHead, node* parent, node* current, int searchNumber)
 {
   
@@ -269,6 +218,52 @@ void deleteNode(node* &root, int deleteNumber)
 	     parent->left = delNode->left;
 	     delete delNode;
 	   }
+       }
+     //two children
+     else if (delNode->right != NULL && delNode->left != NULL)
+       {
+	 node* successor = minimum(delNode->right);
+	 node* parent = getParent(root, root, root, successor);
+	 cout << successor->data << endl;
+	 cout << parent->data << endl;
+	 delNode->data = successor->data;
+
+	 cout << "line 280" << endl;
+	 //no children
+	 if (successor->right == NULL && successor->left == NULL)
+	   {
+	     cout << "line 284" << endl;
+	     //node* parent = getParent(root, root, root, successor);
+	     //cout << parent->data << endl;
+	     
+	     if (parent->left == successor)
+	       {
+		 parent->left = NULL;
+		 delete successor;
+	       }
+	     else
+	       {
+		 parent->right = NULL;
+		 delete successor;
+	       }
+	     
+	   }
+	 
+	 //right children
+	 else if (successor->right != NULL && successor->left == NULL)
+	   {
+	     //node* parent = getParent(root, root, root, successor);
+	     parent->right = successor->right;
+	     delete successor;
+	   }
+	 //left children
+	 else if (successor->right == NULL && successor->left != NULL)
+	   {
+	     //node* parent = getParent(root, root, root, successor);
+	     parent->left = successor->left;
+	     delete successor;
+	   }
+	 
        }
      
     }

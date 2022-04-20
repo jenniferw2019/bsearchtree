@@ -166,14 +166,17 @@ int main()
 	{
 	  int searchNum = 0;
 	  node* result;
+	  node* parent;
 	  cout << "Type a number to search" << endl;
 	  cin >> searchNum;
 	  cin.get();
 	  
 	  result = search(BST, BST, BST, searchNum);
+	  parent = getParent(BST, BST, BST, result);
 	  if (result != NULL)
 	    {
 	      cout << "number is in tree" << endl;
+	      cout << parent->data << endl;
 	    }
 	  else
 	    {
