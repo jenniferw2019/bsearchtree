@@ -1,3 +1,4 @@
+//header file for node
 #ifndef NODE_H
 #define NODE_H
 #include <iostream>
@@ -8,12 +9,14 @@ using namespace std;
 
 struct node
 {
+  //variables
   int data;
   node* left;
   node* right;
 
 };
 
+//function prototypes
 node* search(node* treeNodeHead, node* parent, node* current, int searchNumber);
 void insert(node* &root, node* parent, node* current, int value);
 void print(node* root);

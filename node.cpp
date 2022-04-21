@@ -1,11 +1,13 @@
+//cpp for node
 #include "node.h"
 #include <iostream>
 
 using namespace std;
 
-
+//create binary search tree / insert value into the tree
 void insert(node* &root, node* parent, node* current, int value)
 {
+  //new value becomes the root of the tree
   if (root == NULL)
     {
       node* newNode = new node();
@@ -14,6 +16,7 @@ void insert(node* &root, node* parent, node* current, int value)
       root->left = NULL;
       root->right = NULL;
     }
+  //adding value to the end of the tree (either left or right)
   else if (current == NULL)
     {
       node* newNode = new node();
@@ -43,6 +46,7 @@ void insert(node* &root, node* parent, node* current, int value)
     }
 }
 
+//printing values in order from smallest to largest
 void print(node* root)
 {
   if (root != NULL)
@@ -53,6 +57,7 @@ void print(node* root)
     }
 }
 
+//visualize binary search tree 
 void visualize(node* root, int level)
 {
   if (root != NULL)
@@ -67,15 +72,16 @@ void visualize(node* root, int level)
     }
 }
 
+//search for a specific value in the tree
 node* search(node* treeNodeHead, node* parent, node* current, int searchNumber)
 {
-  
+  //value is not in tree
   if (current == NULL)
     {
       return NULL;
 	
     }
-  
+  //return the node with the value
   else if (current->data == searchNumber)
     {
       return current;
@@ -83,22 +89,20 @@ node* search(node* treeNodeHead, node* parent, node* current, int searchNumber)
   
   else
     {	
-      //cout << "line 99" << endl;
       parent = current;
       if (parent->data < searchNumber)
 	{
-	  //cout << "line 103" << endl;
 	  current = current->right;
 	}
       else
 	{
 	  current = current->left;
 	}
-      //cout << "line 111" << endl;
       return search(treeNodeHead, parent, current, searchNumber);
     }
 }
 
+//search for successor of a node
 node* minimum(node* root)
 {
   if (root->left != NULL)
@@ -112,29 +116,19 @@ node* minimum(node* root)
     }
 }
 
+//find parent of a child node
 node* getParent(node* root, node* current, node* previous, node* lookParent)
 {
+  //return null if looking for the parent of the root
   if (root == lookParent)
     {
       return NULL;
     }
+  //return parent node
   else if (current == lookParent)
     {
       return previous;
     }
-  /*
-  else if (current == NULL)
-    {
-      if (previous == lookParent)
-	{
-	  return previous;
-	}
-      else
-	{
-	  return NULL;
-	}
-    }
-  */
   else 
     {
       previous = current;
@@ -150,11 +144,12 @@ node* getParent(node* root, node* current, node* previous, node* lookParent)
     }
 }
 
-
+//delete node from tree
 void deleteNode(node* &root, int deleteNumber)
 {
+  //search for node with the value user wants to delete
   node* delNode = search(root, root, root, deleteNumber);
-  //cout << delNode->data << endl;
+  
   if (delNode == NULL)
     {
       cout << "number not in tree" << endl;
@@ -162,9 +157,10 @@ void deleteNode(node* &root, int deleteNumber)
     }
   else
     {	
-      //no child
+      //no child, delete the node
      if (delNode->left == NULL && delNode->right == NULL)
 	{
+	  //if node is the root, then delete root
 	  if (delNode == root)
 	    {
 	      node* temp = root;
@@ -174,6 +170,7 @@ void deleteNode(node* &root, int deleteNumber)
 	  else
 	    {
 	      node* parent = getParent(root, root, root, delNode);
+	      //delete node if its a left child
 	      if (parent->left == delNode)
 		{
 		  parent->left = NULL;
@@ -181,6 +178,7 @@ void deleteNode(node* &root, int deleteNumber)
 		}
 	      else
 		{
+		  //delete node if its a right child
 		  parent->right = NULL;
 		  delete delNode;
 		}
@@ -198,8 +196,16 @@ void deleteNode(node* &root, int deleteNumber)
 	 else
 	   {
 	     node* parent = getParent(root, root, root, delNode);
-	     parent->right = delNode->right;
-	     delete delNode;
+	     if (parent->left == delNode)
+	       {
+		 parent->left = delNode->right;
+		 delete delNode;
+	       }
+	     else
+	       {
+		 parent->right = delNode->right;
+		 delete delNode;
+	       }
 	  
 	   }
        }
@@ -215,8 +221,16 @@ void deleteNode(node* &root, int deleteNumber)
 	 else
 	   {
 	     node* parent = getParent(root, root, root, delNode);
-	     parent->left = delNode->left;
-	     delete delNode;
+	     if (parent->right == delNode)
+	       {
+		 parent->right = delNode->left;
+		 delete delNode;
+	       }
+	     else
+	       {
+		 parent->left = delNode->left;
+		 delete delNode;
+	       }
 	   }
        }
      //two children
@@ -224,15 +238,11 @@ void deleteNode(node* &root, int deleteNumber)
        {
 	 node* successor = minimum(delNode->right);
 	 node* parent = getParent(root, root, root, successor);
-	 cout << successor->data << endl;
-	 cout << parent->data << endl;
 	 delNode->data = successor->data;
 
-	 cout << "line 280" << endl;
 	 //no children
 	 if (successor->right == NULL && successor->left == NULL)
 	   {
-	     cout << "line 284" << endl;
 	     //node* parent = getParent(root, root, root, successor);
 	     //cout << parent->data << endl;
 	     
@@ -253,15 +263,16 @@ void deleteNode(node* &root, int deleteNumber)
 	 else if (successor->right != NULL && successor->left == NULL)
 	   {
 	     //node* parent = getParent(root, root, root, successor);
-	     parent->right = successor->right;
-	     delete successor;
-	   }
-	 //left children
-	 else if (successor->right == NULL && successor->left != NULL)
-	   {
-	     //node* parent = getParent(root, root, root, successor);
-	     parent->left = successor->left;
-	     delete successor;
+	     if (parent->left == successor)
+	       {
+		 parent->left = successor->right;
+		 delete successor;
+	       }
+	     else
+	       {
+		 parent->right = successor->right;
+		 delete successor;
+	       }
 	   }
 	 
        }

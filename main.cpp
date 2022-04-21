@@ -1,3 +1,11 @@
+/*
+The program prompts the user to enter in numbers in console or enter number with a file.
+Program creates a binary search tree
+User can then add a number, search if a number is in the tree, visually display the tree, and delete
+a number from the tree. 
+Author: Jennifer Wang
+4/19/22
+ */
 #include "node.h"
 #include <fstream>
 #include <cstring>
@@ -18,15 +26,16 @@ int main()
   char* bufferfile;
   int* numberArray;
   node* BST = NULL;
-  
+
+  //ask user if they want to insert with a console or a file
   cout << "do you want to insert through a console or file?" << endl;
   cout << "type CONSOLE for console insert or FILE for file insert" << endl;
   cin.get(option, 20);
   cin.get();
-
+  //user enter numbers through the console
   if (strcmp(option, "CONSOLE") == 0)
     {
-      cout << "Enter a series of numbers between 1 and 999" << endl;
+      cout << "Enter a series of numbers between 1 and 999 separated by a single space" << endl;
       cin.get(strInput, 100);
       cin.get();
 
@@ -50,41 +59,20 @@ int main()
 	  token = strtok(NULL, " ");
 	  a = a + 1;
 	}
-      /*
-      for (int i = 0; i < tokenCount; i++)
-	{
-	  cout << numberArray[i] << endl;
-	}
-      */
 
       for (int i = 0; i < tokenCount; i++)
 	{
 	  insert(BST, BST, BST, numberArray[i]);
 	}
-      //cout << BST->data << endl;
-
+      
       print(BST);
       cout << endl;
-
-      
-      node* temp = NULL;
-      temp = minimum(BST);
-      cout << temp->data << endl;
-
-      node* parent = NULL;
-      parent = getParent(BST, BST, BST, temp);
-      if (parent != NULL)
-	{
-	  cout << parent->data << endl;
-	}
-      else
-	{
-	  cout << "parent is null" << endl;
-	}
       
     }
-  if (strcmp(option, "FILE") == 0)
-    {
+  
+  //user read in number from a file
+  else if (strcmp(option, "FILE") == 0)
+    {      
       ifstream file ("file.txt", ifstream::in);
       if (file)
 	{
@@ -129,40 +117,43 @@ int main()
 
       print(BST);
       cout << endl;
-
-      
-      node* temp = NULL;
-      temp = minimum(BST);
-      cout << temp->data << endl;
-
-      node* findParent = NULL;
-      findParent = getParent(BST, BST, BST, temp);
-      cout << findParent->data << endl;
-      
+          
     }
-
+  
   while (runProgram == true)
     {
-      cout << "Type ADD, VISUALIZE, SEARCH, DELETE" << endl;
+      //prompt user to add, visualize, search, or delete 
+      cout << "Type ADD, VISUALIZE, SEARCH, DELETE, or QUIT" << endl;
       cin.get(option2, 20);
       cin.get();
 
+      //add a number in the tree
       if (strcmp(option2, "ADD") == 0)
 	{
 	  int addNum = 0;
 	  cout << "Type a number to add into tree" << endl;
 	  cin >> addNum;
 	  cin.get();
-
-	  insert(BST, BST, BST, addNum);
+	  
+	  node* searchNumber = search(BST, BST, BST, addNum);
+	  if (searchNumber == NULL)
+	    {
+	      insert(BST, BST, BST, addNum);
+	    }
+	  else
+	    {
+	      cout << "number is already in tree" << endl;
+	    }
 	}
 
-      if (strcmp(option2, "VISUALIZE") == 0)
+      //visualize the tree
+      else  if (strcmp(option2, "VISUALIZE") == 0)
 	{
 	  visualize(BST, 0);
 	}
 
-      if (strcmp(option2, "SEARCH") == 0)
+      //ask user what number to search for in the tree
+      else if (strcmp(option2, "SEARCH") == 0)
 	{
 	  int searchNum = 0;
 	  node* result;
@@ -172,19 +163,18 @@ int main()
 	  cin.get();
 	  
 	  result = search(BST, BST, BST, searchNum);
-	  parent = getParent(BST, BST, BST, result);
 	  if (result != NULL)
 	    {
 	      cout << "number is in tree" << endl;
-	      cout << parent->data << endl;
 	    }
 	  else
 	    {
 	      cout << "number is not in tree" << endl;
 	    }
 	}
-      
-      if (strcmp(option2, "DELETE") == 0)
+
+      //ask user what number to delete from the tree
+      else if (strcmp(option2, "DELETE") == 0)
 	{
 	  int deleteNum = 0;
 	  cout << "type the number you want to delete" << endl;
@@ -193,7 +183,11 @@ int main()
 
 	  deleteNode(BST, deleteNum);
 	}
+      else if (strcmp(option2, "QUIT") == 0)
+	{
+	  runProgram = false;
+	}
       
     }
- 
+  
 }
